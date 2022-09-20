@@ -6,6 +6,7 @@ import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+import javax.swing.table.DefaultTableModel;
 
 import model.Categoria;
 import model.Producto;
@@ -24,6 +25,7 @@ import javax.swing.JTextField;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import javax.swing.JComboBox;
+import javax.swing.JTable;
 
 public class FrmManteProd extends JFrame {
 
@@ -36,7 +38,10 @@ public class FrmManteProd extends JFrame {
 	private JTextField txtDescripcion;
 	private JTextField txtStock;
 	private JTextField txtPrecio;
+	private JTable tblSalida;
 
+	DefaultTableModel modelo = new DefaultTableModel();
+	
 	/**
 	 * Launch the application.
 	 */
@@ -59,7 +64,7 @@ public class FrmManteProd extends JFrame {
 	public FrmManteProd() {
 		setTitle("Mantenimiento de Productos");
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		setBounds(100, 100, 450, 390);
+		setBounds(100, 100, 450, 617);
 		contentPane = new JPanel();
 		contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
 		setContentPane(contentPane);
@@ -150,6 +155,20 @@ public class FrmManteProd extends JFrame {
 		});
 		btnBuscar.setBounds(324, 63, 89, 23);
 		contentPane.add(btnBuscar);
+		
+		JScrollPane scrollPane_1 = new JScrollPane();
+		scrollPane_1.setBounds(10, 370, 414, 181);
+		contentPane.add(scrollPane_1);
+		
+		tblSalida = new JTable();
+		scrollPane_1.setViewportView(tblSalida);
+		tblSalida.setModel(modelo);		
+		modelo.addColumn("Código");
+		modelo.addColumn("Producto");
+		modelo.addColumn("Stock");
+		modelo.addColumn("Precio");
+		modelo.addColumn("Categoría");
+		modelo.addColumn("Proveedor");
 
 		llenaCombo();
 	}
@@ -241,6 +260,12 @@ public class FrmManteProd extends JFrame {
 							p.getObjCategoria().getDescripcion());
 			imprimir("Estado : " + p.getEst_prod());
 			imprimir("Id Proveedor : " + p.getIdproveedor() + " - " + p.getObjProveedor().getNombre_rs() + "\n");
+			// para la tabla
+			Object datos[] = {p.getId_prod(), p.getDes_prod(), p.getStk_prod(), p.getPre_prod(), 
+							  p.getIdcategoria() + " - " + p.getObjCategoria().getDescripcion(), 
+							  p.getIdproveedor() + " - " + p.getObjProveedor().getNombre_rs()};
+			modelo.addRow(datos);
+			
 		}
 		// cerrar
 		em.close();
